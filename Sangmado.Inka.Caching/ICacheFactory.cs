@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RockStone.Inka.Caching
+namespace Sangmado.Inka.Caching
 {
     public interface ICacheFactory
     {

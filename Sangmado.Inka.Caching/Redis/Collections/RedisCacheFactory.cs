@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using StackExchange.Redis;
-using RockStone.Inka.Extensions;
 
-namespace RockStone.Inka.Caching.Redis.Collections
+namespace Sangmado.Inka.Caching.Redis.Collections
 {
     public class RedisCacheFactory : ICacheFactory
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{16D2789E-6CEA-430A-B5B7-EE54E9DB3728}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RockStone.Inka.Caching</RootNamespace>
-    <AssemblyName>RockStone.Inka.Caching</AssemblyName>
+    <RootNamespace>Sangmado.Inka.Caching</RootNamespace>
+    <AssemblyName>Sangmado.Inka.Caching</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -37,6 +37,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Sangmado.Inka.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sangmado.Inka.Serialization.1.0.0.0\lib\net46\Sangmado.Inka.Serialization.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.2.0\lib\net46\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +57,8 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="Collections\IQueue.cs" />
+    <Compile Include="Collections\IStack.cs" />
     <Compile Include="ICacheClientAsync.cs" />
     <Compile Include="ICacheClient.cs" />
     <Compile Include="ICacheFactory.cs" />

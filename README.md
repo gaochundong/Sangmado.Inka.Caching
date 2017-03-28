@@ -1,1 +1,1 @@
-# RockStone.Inka.Caching
+# Sangmado.Inka.Caching

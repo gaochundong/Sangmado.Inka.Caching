@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using StackExchange.Redis;
-using RockStone.Inka.Extensions;
 
-namespace RockStone.Inka.Caching.Redis.Collections
+namespace Sangmado.Inka.Caching.Redis.Collections
 {
     public class RedisQueue<T> : IQueue<T>, IEnumerable<T>, IReadOnlyCollection<T>
     {

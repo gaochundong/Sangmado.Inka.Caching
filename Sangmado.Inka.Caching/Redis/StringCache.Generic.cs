@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace RockStone.Inka.Caching.Redis
+namespace Sangmado.Inka.Caching.Redis
 {
     public class StringCache<T> : ICacheClient<T>, ICacheClientAsync<T>
     {

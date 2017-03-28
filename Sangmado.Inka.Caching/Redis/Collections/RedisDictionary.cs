@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StackExchange.Redis;
 
-namespace RockStone.Inka.Caching.Redis.Collections
+namespace Sangmado.Inka.Caching.Redis.Collections
 {
     public class RedisDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {

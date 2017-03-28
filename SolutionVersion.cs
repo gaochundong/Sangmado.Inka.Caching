@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("RockStone.Inka.Caching")]
+[assembly: AssemblyDescription("Sangmado.Inka.Caching")]
 [assembly: AssemblyCompany("Dennis Gao")]
-[assembly: AssemblyProduct("RockStone.Inka.Caching")]
+[assembly: AssemblyProduct("Sangmado.Inka.Caching")]
 [assembly: AssemblyCopyright("Copyright © 2015-2017, Dennis Gao, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyConfiguration("")]

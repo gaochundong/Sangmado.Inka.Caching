@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using StackExchange.Redis;
 
-namespace RockStone.Inka.Caching.Redis.Collections
+namespace Sangmado.Inka.Caching.Redis.Collections
 {
-    public class RedisList<T> : IList<T>, ICollection<T>, IReadOnlyCollection<T>
+    public class RedisStack<T> : IStack<T>, IEnumerable<T>, IReadOnlyCollection<T>
     {
-        private const string RedisKeyTemplate = "List:{0}";
+        private const string RedisKeyTemplate = "Stack:{0}";
 
         private static Exception IndexOutOfRangeException = new ArgumentOutOfRangeException("index", "Index must be within the bounds of the List.");
 
         private readonly IDatabase _db;
         private readonly string _redisKey;
 
-        public RedisList(IDatabase database, string name)
+        public RedisStack(IDatabase database, string name)
         {
             if (database == null)
             {
@@ -27,69 +28,6 @@ namespace RockStone.Inka.Caching.Redis.Collections
 
             _db = database;
             _redisKey = string.Format(RedisKeyTemplate, name);
-        }
-
-        public int IndexOf(T item)
-        {
-            int index = 0;
-            foreach (var member in this)
-            {
-                if (EqualityComparer<T>.Default.Equals(member, item))
-                {
-                    return index;
-                }
-                index++;
-            }
-            return -1;
-        }
-
-        public void Insert(int index, T item)
-        {
-            try
-            {
-                _db.ListSetByIndex(_redisKey, index, item.ToRedisValue());
-            }
-            catch (RedisServerException redisServerException)
-            {
-                if (IsIndexOutOfRangeExcepiton(redisServerException))
-                {
-                    throw IndexOutOfRangeException;
-                }
-                throw;
-            }
-        }
-
-        public void RemoveAt(int index)
-        {
-            string deleteFlag = Guid.NewGuid().ToString();
-            try
-            {
-                _db.ListSetByIndex(_redisKey, index, deleteFlag, CommandFlags.FireAndForget);
-            }
-            catch (RedisServerException redisServerException)
-            {
-                if (IsIndexOutOfRangeExcepiton(redisServerException))
-                {
-                    throw IndexOutOfRangeException;
-                }
-                throw;
-            }
-            _db.ListRemove(_redisKey, deleteFlag, flags: CommandFlags.FireAndForget);
-        }
-
-        public void Add(T item)
-        {
-            _db.ListRightPush(_redisKey, item.ToRedisValue());
-        }
-
-        public void Clear()
-        {
-            _db.KeyDelete(_redisKey);
-        }
-
-        public bool Contains(T item)
-        {
-            return IndexOf(item) != -1;
         }
 
         public int Count
@@ -105,23 +43,46 @@ namespace RockStone.Inka.Caching.Redis.Collections
             }
         }
 
-        public bool IsReadOnly
+        public void Push(T item)
         {
-            get { return false; }
+            _db.ListRightPush(_redisKey, item.ToRedisValue());
         }
 
-        public bool Remove(T item)
+        public T Pop()
         {
-            int index = IndexOf(item);
-            if (index != -1)
+            return _db.ListRightPop(_redisKey, CommandFlags.FireAndForget).To<T>();
+        }
+
+        public T Peek()
+        {
+            return _db.ListRange(_redisKey, -1, -1, CommandFlags.FireAndForget).FirstOrDefault().To<T>();
+        }
+
+        public bool Contains(T item)
+        {
+            return IndexOf(item) != -1;
+        }
+
+        public void Clear()
+        {
+            _db.KeyDelete(_redisKey);
+        }
+
+        private int IndexOf(T item)
+        {
+            int index = 0;
+            foreach (var member in this)
             {
-                RemoveAt(index);
-                return true;
+                if (EqualityComparer<T>.Default.Equals(member, item))
+                {
+                    return index;
+                }
+                index++;
             }
-            return false;
+            return -1;
         }
 
-        public T this[int index]
+        private T this[int index]
         {
             get
             {
@@ -137,31 +98,6 @@ namespace RockStone.Inka.Caching.Redis.Collections
                     }
                     throw;
                 }
-            }
-            set
-            {
-                Insert(index, value);
-            }
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int index)
-        {
-            if (array == null)
-            {
-                throw new ArgumentNullException("array");
-            }
-            if (index < 0 || index > array.Length)
-            {
-                throw new ArgumentOutOfRangeException("index");
-            }
-            if (array.Length - index < this.Count)
-            {
-                throw new ArgumentException("Destination array is not long enough to copy all the items in the collection. Check array index and length.");
-            }
-
-            foreach (var item in this)
-            {
-                array[index++] = item;
             }
         }
 
@@ -180,13 +116,13 @@ namespace RockStone.Inka.Caching.Redis.Collections
             private int _index;
             private T _current;
             private int _listSize;
-            private RedisList<T> _redisList;
+            private RedisStack<T> _redisStack;
 
-            public Enumerator(RedisList<T> redisList)
+            public Enumerator(RedisStack<T> redisStack)
             {
-                _redisList = redisList;
+                _redisStack = redisStack;
                 _index = 0;
-                _listSize = redisList.Count;
+                _listSize = redisStack.Count;
                 _current = default(T);
             }
 
@@ -218,7 +154,7 @@ namespace RockStone.Inka.Caching.Redis.Collections
                     _current = default(T);
                     return false;
                 }
-                _current = _redisList[_index];
+                _current = _redisStack[_index];
                 ++_index;
                 return true;
             }

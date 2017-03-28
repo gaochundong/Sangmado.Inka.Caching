@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RockStone.Inka.Caching
+namespace Sangmado.Inka.Caching
 {
     public interface ICacheClientAsync
     {

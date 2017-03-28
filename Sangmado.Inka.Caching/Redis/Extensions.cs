@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using StackExchange.Redis;
-using RockStone.Inka.Serialization;
+using Sangmado.Inka.Serialization;
 
-namespace RockStone.Inka.Caching.Redis
+namespace Sangmado.Inka.Caching.Redis
 {
     internal static class Extensions
     {
